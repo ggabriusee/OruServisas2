@@ -37,7 +37,7 @@ body nurodyti, duomenų struktūrą pvz:
   "temperature": -20,
   "city": "Praha",
   "date": "2018-12-31"
-  "footballTeams": []
+  "footballteams": []
 }
 ```
 
@@ -55,18 +55,21 @@ PRIDETI NAUJA KOMANDA
 Postman:
 POST http://localhost:81/locations/{id}/football_teams, kur id nuo 1 iki 5.
 Ieiti i raw ir ivesti:
+```JSON
 {
   "Name": "New team"
 }
-
+```
 
 PAKEISTI KOMANDOS ATRIBUTUS
 Postman:
 PUT http://localhost:81/locations/{id}/football_teams, kur id nuo 1 iki 5.
 Ieiti i raw ir ivesti :
+```JSON
 {
   "Captain": "Messi"
 }
+```
 
 ISTRINTI KOMANDA
 Postman:
