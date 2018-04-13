@@ -1,0 +1,17 @@
+mano:
+  build: OruServisas-master/
+  ports:
+    - "5000:5000"
+  volumes:
+    - OruServisas-master/:/code
+kitas:
+  build: Web_Servisai-master/
+  command: python app.py
+  ports:
+    - "81:5000"
+  volumes:
+    - Web_Servisai-master/:/code
+  links:
+    - redis
+redis:
+  image: redis
