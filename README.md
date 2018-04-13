@@ -49,11 +49,11 @@ INFORMACIJA APIE VISAS KOMANDAS
 
 Informacija apie konkrecia komanda
 Postman:
-GET http://localhost:81/locations/<id>/football_teams , kur id musu atveju nuo 1 iki 5
+GET http://localhost:81/locations/{id}/football_teams , kur id musu atveju nuo 1 iki 5
 
 PRIDETI NAUJA KOMANDA
 Postman:
-POST http://localhost:81/locations/<id>/football_teams, kur id nuo 1 iki 5.
+POST http://localhost:81/locations/{id}/football_teams, kur id nuo 1 iki 5.
 Ieiti i raw ir ivesti:
 {
   "Name": "New team"
@@ -62,7 +62,7 @@ Ieiti i raw ir ivesti:
 
 PAKEISTI KOMANDOS ATRIBUTUS
 Postman:
-PUT http://localhost:81/locations/<id>/football_teams, kur id nuo 1 iki 5.
+PUT http://localhost:81/locations/{id}/football_teams, kur id nuo 1 iki 5.
 Ieiti i raw ir ivesti :
 {
   "Captain": "Messi"
@@ -70,5 +70,5 @@ Ieiti i raw ir ivesti :
 
 ISTRINTI KOMANDA
 Postman:
-DELETE http://localhost:81/locations/<id>/football_teams , kur id nuo 1 iki 6
+DELETE http://localhost:81/locations/{id}/football_teams , kur id nuo 1 iki 6
 
