@@ -144,12 +144,13 @@ public class KitasServisas {
 
 
 	public static Object getTeamWithId(Request request, Response response, ServiceContainer sc){
-		//Object o = null;
+		Object o = null;
 		FootballTeam obj = null;
 		int ident = Integer.valueOf(request.params(":id"));
 		try{
 			obj = getJson(request, response, ident);
 			sc.getUsingId(ident).getFootballTeams().add(obj);
+			o = sc.getUsingId(ident);
 			//o = sc.getUsingId(ident);
 		}catch(Exception e) {
 		    response.status(HTTP_NOT_FOUND);
@@ -159,7 +160,7 @@ public class KitasServisas {
         
 		}
 		
- 		return "OK";
+ 		return o;
 
 
 
