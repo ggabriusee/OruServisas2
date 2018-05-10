@@ -45,8 +45,11 @@ BENDRAVIMAS SU FUTBOLO KOMANDŲ SERVISU
 
 
 INFORMACIJA APIE VISAS KOMANDAS
+
 Informacija apie konkrecia komanda
+
 Postman:
+
 GET http://localhost:5000/locations/{id}/football_teams/{fid}
 
 GET http://localhost:5000/locations/{id}/football_teams/{fid}?embedded=footballTeam
