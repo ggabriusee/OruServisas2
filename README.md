@@ -64,7 +64,9 @@ GET http://localhost:5000/locations/{id}/football_teams?embedded=footballTeam
 
 
 PRIDETI NAUJA KOMANDA
+
 Postman:
+
 POST http://localhost:5000/locations/{id}/football_teams
 Ieiti i raw ir ivesti:
 ```JSON
@@ -74,7 +76,9 @@ Ieiti i raw ir ivesti:
 ```
 
 PAKEISTI KOMANDOS ATRIBUTUS
+
 Postman:
+
 PUT http://localhost:5000/locations/{id}/football_teams/{fid}
 Ieiti i raw ir ivesti :
 ```JSON
@@ -84,6 +88,8 @@ Ieiti i raw ir ivesti :
 ```
 
 ISTRINTI KOMANDA
+
 Postman:
+
 DELETE http://localhost:5000/locations/{id}/football_teams/{fid}
 
