@@ -1,4 +1,4 @@
-Norint paleisti servisus reikia paleisiti komandas:
+Norint paleisti servisus reikia įvykdyti komandas:
 
 `docker-compose build`
 
@@ -45,15 +45,24 @@ BENDRAVIMAS SU FUTBOLO KOMANDŲ SERVISU
 
 
 INFORMACIJA APIE VISAS KOMANDAS
-
-
 Informacija apie konkrecia komanda
 Postman:
-GET http://localhost:81/locations/{id}/football_teams , kur id musu atveju nuo 1 iki 5
+GET http://localhost:5000/locations/{id}/football_teams/{fid}
+
+GET http://localhost:5000/locations/{id}/football_teams/{fid}?embedded=footballTeam
+
+Be embedded, gražinama nuoroda į resursą, su embedded pats resursas 
+
+Arba galima gauti futbolo komandą nenurodant id, tuomet, siejama pagal location id:
+
+GET http://localhost:5000/locations/{id}/football_teams
+
+GET http://localhost:5000/locations/{id}/football_teams?embedded=footballTeam
+
 
 PRIDETI NAUJA KOMANDA
 Postman:
-POST http://localhost:81/locations/{id}/football_teams, kur id nuo 1 iki 5.
+POST http://localhost:5000/locations/{id}/football_teams
 Ieiti i raw ir ivesti:
 ```JSON
 {
@@ -63,7 +72,7 @@ Ieiti i raw ir ivesti:
 
 PAKEISTI KOMANDOS ATRIBUTUS
 Postman:
-PUT http://localhost:81/locations/{id}/football_teams, kur id nuo 1 iki 5.
+PUT http://localhost:5000/locations/{id}/football_teams/{fid}
 Ieiti i raw ir ivesti :
 ```JSON
 {
@@ -73,5 +82,5 @@ Ieiti i raw ir ivesti :
 
 ISTRINTI KOMANDA
 Postman:
-DELETE http://localhost:81/locations/{id}/football_teams , kur id nuo 1 iki 6
+DELETE http://localhost:5000/locations/{id}/football_teams/{fid}
 

@@ -10,7 +10,7 @@ public class CityData {
     private String city;
     private String date;
     private ArrayList<FootballTeam> footballTeams;
-
+    
     public CityData(int id, double temperature, String city, String date, ArrayList<FootballTeam> farray) {
         this.id = id;
         this.temperature = temperature;

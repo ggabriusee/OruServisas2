@@ -11,9 +11,11 @@ public class FootballTeam {
 	private String Name;    
 	private String Stadium;
     
-    
+    public FootballTeam(){}
 	
-
+    public FootballTeam(int id) {
+	this.ID = id;
+    }
     public FootballTeam(String attendance, String captain, String country, int id, String name, String stadium) {
         this.Attendance = attendance;
         this.Captain = captain;

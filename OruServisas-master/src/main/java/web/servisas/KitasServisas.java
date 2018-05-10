@@ -1,13 +1,11 @@
 package web.servisas;
 
-import static spark.Spark.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.io.IOException;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import spark.Request;
@@ -18,30 +16,37 @@ public class KitasServisas {
 	private static final int HTTP_NOT_FOUND = 404;
 	private static final int POST_CREATED_RESPONSE = 201;
 	KitasServisas() {}
-	//private static UserContainer uc = new UserContainer();
+	
 	public static FootballTeam getJson(Request request, Response response, int id) throws MalformedURLException, ProtocolException, IOException {
 		FootballTeam ft = null;
-		URL url = new URL("http://localhost:81/football_teams/" + id); //
+		URL url = new URL("http://kitas:5000/football_teams/" + id);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Accept", "application/json");
-		if (conn.getResponseCode() != 200) {
-		    throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		if (conn.getResponseCode() == 404) {
+		    throw new RuntimeException("Tokio Id nera");
+		}else if(conn.getResponseCode() != 200){
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 		}
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-		            (conn.getInputStream())));
-		String out;
-		String output = "";
-		while ((out = br.readLine()) != null) {
-		    output = output + out;
-		}
-		output = output.replaceAll("[\\[\\]]", "");
-		//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		//System.out.println(output);
-		//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		ft = JsonTransformer.fromJson(output, FootballTeam.class);
-
+                
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                            (conn.getInputStream())));
+                String out;
+                String output = "";
+                while ((out = br.readLine()) != null) {
+                    output = output + out;
+                }
+                output = output.replaceAll("[\\[\\]]", "");
+                ft = JsonTransformer.fromJson(output, FootballTeam.class);
+                if(ft == null){
+                    throw new RuntimeException("Can't find element with selected ID");
+                }
+                String embed = request.queryParams("embedded");
+                if(embed != null && embed.equalsIgnoreCase("footballTeam")){
+                }else{
+                    ft = new FootballTeam(id);
+                }
+		
 		if (conn != null)
 		    conn.disconnect();
 
@@ -52,15 +57,8 @@ public class KitasServisas {
 	public static FootballTeam postJson(Request request, Response response) throws MalformedURLException, ProtocolException, IOException {
 		byte[] postDataBytes = request.body().getBytes("UTF-8");
 		FootballTeam ft = null;
-		URL url = new URL("http://localhost:81/football_teams"); //
+		URL url = new URL("http://kitas:5000/football_teams"); 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		//conn.setRequestMethod("POST");
-		//conn.setRequestProperty("Content-Type", "application/json");
-		//if (conn.getResponseCode() != 200) {
-		  //  throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-		//}
-		//byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
-		
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-Type", "application/json");
 		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
@@ -76,7 +74,6 @@ public class KitasServisas {
 		while ((out = br.readLine()) != null) {
 		    output = output + out;
 		}
-		//output = output.replaceAll("[\\[\\]]", "");
 		ft = JsonTransformer.fromJson(output, FootballTeam.class);
 
 		if (conn != null)
@@ -89,15 +86,8 @@ public class KitasServisas {
 	public static FootballTeam putJson(Request request, Response response, int id) throws MalformedURLException, ProtocolException, IOException {
 		byte[] postDataBytes = request.body().getBytes("UTF-8");
 		FootballTeam ft = null;
-		URL url = new URL("http://localhost:81/football_teams/" + id); //
+		URL url = new URL("http://kitas:5000/football_teams/" + id); 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		//conn.setRequestMethod("POST");
-		//conn.setRequestProperty("Content-Type", "application/json");
-		//if (conn.getResponseCode() != 200) {
-		  //  throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-		//}
-		//byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
-		
 		conn.setRequestMethod("PUT");
 		conn.setRequestProperty("Content-Type", "application/json");
 		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
@@ -105,6 +95,12 @@ public class KitasServisas {
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
 		conn.getOutputStream().write(postDataBytes);
+
+		if (conn.getResponseCode() == 404) {
+		    throw new RuntimeException("Tokio Id nera");
+		}else if(conn.getResponseCode() != 200){
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		}
 	
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 		            (conn.getInputStream())));
@@ -113,7 +109,6 @@ public class KitasServisas {
 		while ((out = br.readLine()) != null) {
 		    output = output + out;
 		}
-		//output = output.replaceAll("[\\[\\]]", "");
 		ft = JsonTransformer.fromJson(output, FootballTeam.class);
 
 		if (conn != null)
@@ -123,131 +118,120 @@ public class KitasServisas {
 
 	}
 
-	public static void deleteJson(Request request, Response response, int id) throws MalformedURLException, ProtocolException, IOException {
-		//byte[] postDataBytes = request.body().getBytes("UTF-8");
+	public static String deleteJson(Request request, Response response, int id) throws MalformedURLException, ProtocolException, IOException {
 		FootballTeam ft = null;
-		URL url = new URL("http://localhost:81/football_teams/" + id); //
+		URL url = new URL("http://kitas:5000/football_teams/" + id);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		//conn.setRequestMethod("POST");
-		//conn.setRequestProperty("Content-Type", "application/json");
-		//if (conn.getResponseCode() != 200) {
-		  //  throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-		//}
-		//byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
-		
+		conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/json");
 		conn.setRequestMethod("DELETE");
-
+                //int responseCode = conn.getResponseCode(); irgi veikia
+                conn.connect();
+                try{
+                    conn.getInputStream();
+                }catch(Exception e){
+                    return "Tokio Id nera";
+                }
 		if (conn != null)
 		    conn.disconnect();
+                return "OK";
 
 	}
 
-
+        public static Object getTeam(Request request, Response response, ServiceContainer sc){
+            	Object o = null;
+	    	FootballTeam obj = null;
+		int aid = Integer.valueOf(request.params(":id"));
+            	try{
+			obj = getJson(request, response, aid);
+                        TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
+                        tc.addTeam(obj);
+                        sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
+			o = sc.getUsingId(aid);
+		}catch(Exception e) {
+		    	response.status(HTTP_NOT_FOUND);
+			e.printStackTrace();
+			return e.getMessage();
+        
+		}	
+            	return o;
+        }
 	public static Object getTeamWithId(Request request, Response response, ServiceContainer sc){
 		Object o = null;
 		FootballTeam obj = null;
-		int ident = Integer.valueOf(request.params(":id"));
+		int aid = Integer.valueOf(request.params(":id"));
+                int faid = Integer.valueOf(request.params(":fid"));
 		try{
-			obj = getJson(request, response, ident);
-			sc.getUsingId(ident).getFootballTeams().add(obj);
-			o = sc.getUsingId(ident);
-			//o = sc.getUsingId(ident);
+			obj = getJson(request, response, faid);
+                        TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
+                        tc.addTeam(obj);
+                        sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
+			o = sc.getUsingId(aid);
 		}catch(Exception e) {
-		    response.status(HTTP_NOT_FOUND);
+		    	response.status(HTTP_NOT_FOUND);
 			e.printStackTrace();
-		    //return new Exception("GUGUGU");
 			return e.getMessage();
         
-		}
-		
+		}	
  		return o;
-
-
-
 	}
 
 	public static Object postTeam(Request request, Response response, ServiceContainer sc){
 		FootballTeam obj = null;
-		int ident = Integer.valueOf(request.params(":id"));
+		int aid = Integer.valueOf(request.params(":id"));
 		try{
-			obj = postJson(request, response);
-			sc.getUsingId(ident).getFootballTeams().add(obj);
-			//o = sc.getUsingId(ident);
+                    obj = postJson(request, response);
+                    TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
+                    tc.addTeam(obj);
+                    sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
 		}catch(Exception e) {
 		    response.status(HTTP_NOT_FOUND);
 			e.printStackTrace();
-		    //return new Exception("GUGUGU");
 			return e.getMessage();
         
 		}
 		response.status(POST_CREATED_RESPONSE);
 		response.header("Location", request.url());
 		return "Created";
-
-
-
 	}
 
 	public static Object putTeam(Request request, Response response, ServiceContainer sc){
 		FootballTeam obj = null;
-		int ident = Integer.valueOf(request.params(":id"));
+		int aid = Integer.valueOf(request.params(":id"));
+                int faid = Integer.valueOf(request.params(":fid"));
 		try{
-			obj = putJson(request, response, ident);
-			upTeam(ident, obj, sc.getUsingId(ident).getFootballTeams());
-			//o = sc.getUsingId(ident);
+			obj = putJson(request, response, faid);
+                        TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
+			tc.upTeam(faid, obj);
+                        sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
 		}catch(Exception e) {
 		    response.status(HTTP_NOT_FOUND);
 			e.printStackTrace();
-		    //return new Exception("GUGUGU");
 			return e.getMessage();
         
 		}
 		
  		return "OK";
 
-	}
-
-	public static void upTeam(int id, FootballTeam teamObj, ArrayList<FootballTeam> teamArray) throws Exception {
-		boolean check=false;
-		for (int i = 0; i < teamArray.size(); i++) {
-			if(teamArray.get(i).getID() == id){
-				check=true;
-				teamObj.setID(id);
-				teamArray.set(i, teamObj);
-				break;
-			}
-		}
-		if(check==false){throw new Exception("Tokio Id nėra");}
 	}
 
 	public static Object deleteTeam(Request request, Response response, ServiceContainer sc){
-		int ident = Integer.valueOf(request.params(":id"));
+		int aid = Integer.valueOf(request.params(":id"));
+                int faid = Integer.valueOf(request.params(":fid"));
+                String message = "OK";
 		try{
-			deleteJson(request, response, ident);
-			delTeam(ident, sc.getUsingId(ident).getFootballTeams());
-			//o = sc.getUsingId(ident);
+			message = deleteJson(request, response, faid);
+                        TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
+			tc.delTeam(faid);
+                        sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
 		}catch(Exception e) {
 		    response.status(HTTP_NOT_FOUND);
 			e.printStackTrace();
-		    //return new Exception("GUGUGU");
 			return e.getMessage();
         
 		}
 		
- 		return "OK";
+ 		return message;
 		
 	}
-
-	public static void delTeam(int id, ArrayList<FootballTeam> teamArray) throws Exception{
-		boolean check=false;
-		for (int i = 0; i < teamArray.size(); i++) {
-			if(teamArray.get(i).getID() == id){
-				check=true;
-				teamArray.remove(i);
-				break;
-			}
-		}
-		if(check==false){throw new Exception("Tokio Id nėra");}
-	}
-
 }
