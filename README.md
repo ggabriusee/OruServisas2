@@ -45,8 +45,11 @@ BENDRAVIMAS SU FUTBOLO KOMANDŲ SERVISU
 
 
 INFORMACIJA APIE VISAS KOMANDAS
+
 Informacija apie konkrecia komanda
+
 Postman:
+
 GET http://localhost:5000/locations/{id}/football_teams/{fid}
 
 GET http://localhost:5000/locations/{id}/football_teams/{fid}?embedded=footballTeam
@@ -61,8 +64,11 @@ GET http://localhost:5000/locations/{id}/football_teams?embedded=footballTeam
 
 
 PRIDETI NAUJA KOMANDA
+
 Postman:
+
 POST http://localhost:5000/locations/{id}/football_teams
+
 Ieiti i raw ir ivesti:
 ```JSON
 {
@@ -71,8 +77,11 @@ Ieiti i raw ir ivesti:
 ```
 
 PAKEISTI KOMANDOS ATRIBUTUS
+
 Postman:
+
 PUT http://localhost:5000/locations/{id}/football_teams/{fid}
+
 Ieiti i raw ir ivesti :
 ```JSON
 {
@@ -81,6 +90,8 @@ Ieiti i raw ir ivesti :
 ```
 
 ISTRINTI KOMANDA
+
 Postman:
+
 DELETE http://localhost:5000/locations/{id}/football_teams/{fid}
 
