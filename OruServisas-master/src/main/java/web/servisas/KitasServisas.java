@@ -23,6 +23,12 @@ public class KitasServisas {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Accept", "application/json");
+                try{
+                    conn.getResponseCode();
+                }catch(Exception e) {
+                        ft = new FootballTeam(id);
+			return ft;
+		}
 		if (conn.getResponseCode() == 404) {
 		    throw new RuntimeException("Tokio Id nera");
 		}else if(conn.getResponseCode() != 200){
