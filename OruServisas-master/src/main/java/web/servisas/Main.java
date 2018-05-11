@@ -14,7 +14,7 @@ public class Main {
 		path("/locations", () -> {
 
 			get("", (request, response) -> {
-				return OruServisas.getAllData(request, response, myService);
+				return KitasServisas.getTeam(request, response, myService);
 			}, new JsonTransformer());
 
 			get("/byCity/:city", (request, response) -> {
@@ -22,7 +22,7 @@ public class Main {
 			}, new JsonTransformer());
 
 			get("/:id", (request, response) -> {
-				return OruServisas.getWithId(request, response, myService);
+				return KitasServisas.getTeamWithId(request, response, myService);
 			}, new JsonTransformer());
 
 			post("", (request, response) -> {

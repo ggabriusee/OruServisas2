@@ -25,4 +25,3 @@ public class FootballTeam {
 	this.Stadium = stadium;
     }
 }
-

@@ -6,6 +6,7 @@ import spark.Request;
 import spark.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 
 public class OruServisas {
@@ -39,6 +40,8 @@ public class OruServisas {
 			if (!(jsonObj.isNull("date")) && !(isValidDate(jsonObj.optString("date"))))
 				throw new Exception("Klaida! Blogas datos formatas");
 			CityData cityObject = JsonTransformer.fromJson(request.body(), CityData.class);
+                        cityObject.setFootballTeams(new ArrayList<FootballTeam>());
+                        //cityObject.g
 			int addedId = mySer.addData(cityObject); // addData nemeta jokio exception
 			response.status(POST_CREATED_RESPONSE);
 			response.header("Location", request.url() + "/" + String.valueOf(addedId));

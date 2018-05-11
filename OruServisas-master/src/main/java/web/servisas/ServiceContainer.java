@@ -10,8 +10,8 @@ public class ServiceContainer{
 		cityArray.add(new CityData(1, 0, "Vilnius", "2018-02-02",new ArrayList<FootballTeam>()));
 		cityArray.add(new CityData(2, 15, "Kaunas", "2018-04-02",new ArrayList<FootballTeam>()));
 		cityArray.add(new CityData(3, -20, "Vilnius", "2018-12-30",new ArrayList<FootballTeam>()));
-                cityArray.get(0).getFootballTeams().add(new FootballTeam("99354", "Andres Iniesta", "Italy", 1, "FC Barcelona", "Camp Nou" ));
-                cityArray.get(1).getFootballTeams().add(new FootballTeam("1000", "RAT", "France", 2, "Real Madrid", "Siemens Arena" ));
+                //cityArray.get(0).getFootballTeams().add(new FootballTeam(1));
+                //cityArray.get(1).getFootballTeams().add(new FootballTeam(2));
 	}
         
 	public void delData(int id) throws Exception{
@@ -38,6 +38,18 @@ public class ServiceContainer{
 		}
 		if(check==false){throw new Exception("Tokio Id nėra");}
 	}
+        public boolean checkId(int id) throws Exception{
+		boolean check=false;
+		
+		for (int i = 0; i < cityArray.size(); i++) {
+			if(cityArray.get(i).getId() == id){
+				check=true;
+				break;
+			}
+		}	
+		return check;
+	}
+        
 	public CityData getUsingId(int id) throws Exception{
 		boolean check=false;
 		int index=-1;

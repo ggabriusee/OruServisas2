@@ -141,28 +141,36 @@ public class KitasServisas {
         public static Object getTeam(Request request, Response response, ServiceContainer sc){
             	Object o = null;
 	    	FootballTeam obj = null;
-		int aid = Integer.valueOf(request.params(":id"));
+		//int aid = Integer.valueOf(request.params(":id"));
+		//int aid = sc.getAll().get(0).getId();
             	try{
-			obj = getJson(request, response, aid);
-                        TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
-                        tc.addTeam(obj);
-                        sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
-			o = sc.getUsingId(aid);
+                        for(int aid = 1; aid <= sc.getAll().size();aid++){
+                            if(!(sc.checkId(aid))){
+                                continue;
+                            }
+                            obj = getJson(request, response, aid);
+                            TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
+                            tc.addTeam(obj);
+                            sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
+                            
+                        }
+			
+			//o = sc.getUsingId(aid);
 		}catch(Exception e) {
 		    	response.status(HTTP_NOT_FOUND);
 			e.printStackTrace();
 			return e.getMessage();
         
 		}	
-            	return o;
+            	return sc.getAll();
         }
 	public static Object getTeamWithId(Request request, Response response, ServiceContainer sc){
 		Object o = null;
 		FootballTeam obj = null;
 		int aid = Integer.valueOf(request.params(":id"));
-                int faid = Integer.valueOf(request.params(":fid"));
+                //int faid = Integer.valueOf(request.params(":fid"));
 		try{
-			obj = getJson(request, response, faid);
+			obj = getJson(request, response, aid);
                         TeamContainer tc = new TeamContainer(sc.getUsingId(aid).getFootballTeams());
                         tc.addTeam(obj);
                         sc.getUsingId(aid).setFootballTeams(tc.getTeamArray());
